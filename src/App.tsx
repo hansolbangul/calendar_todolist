@@ -4,6 +4,7 @@ import { darkTheme, lightTheme } from './theme';
 import { isDarkAtom } from './atoms';
 import { useRecoilValue } from 'recoil';
 import FootToggle from './nav/FootToggle';
+import { AddModal } from './component/AddModal';
 // react 쓸데없는 padding이랑 margin 제거
 const GlobalStyle = createGlobalStyle`
 @font-face {
@@ -46,6 +47,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+  overflow: hidden;
 }
 menu, ol, ul {
   list-style: none;
@@ -83,6 +85,7 @@ function App() {
     <>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
         <GlobalStyle />
+        <AddModal />
         <Router />
         <FootToggle />
       </ThemeProvider>
