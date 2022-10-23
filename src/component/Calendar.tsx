@@ -1,9 +1,14 @@
 import React, { useCallback, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { Container, Flex, TitleForm } from "../ts/styled";
+import { isTodoAtom } from "../atoms";
+import { TypeList } from "../DB/TypeDb";
+import { ITodo } from "../ts/interface";
+import { Color, Container, Flex, TitleForm } from "../ts/styled";
 import { TodoList } from "./TodoList";
 
 const Calendar = () => {
+  const isTodo = useRecoilValue<ITodo[]>(isTodoAtom)
   const today = {
     year: new Date().getFullYear(), //오늘 연도
     month: new Date().getMonth() + 1, //오늘 월
@@ -17,7 +22,8 @@ const Calendar = () => {
   const [props, setProps] = useState({
     year: today.year,
     month: today.month,
-    date: today.date
+    date: today.date,
+    time: '10:00'
   })
 
   const prevMonth = useCallback(() => {
@@ -44,7 +50,8 @@ const Calendar = () => {
     setProps({
       year: selectedYear,
       month: month,
-      date: date
+      date: date,
+      time: '10:00'
     })
   }
 
@@ -81,6 +88,8 @@ const Calendar = () => {
       if (week[day] === nowDay) {
         for (let i = 0; i < dateTotalCount; i++) {
           date = i + 1
+
+          const tagArr = isTodo.filter(item => new Date(item.startDate).getTime() === new Date(`${selectedYear}-${selectedMonth}-${date}`).getTime())
           dayArr.push(
             <CalDay
               onClick={() => dayChange(selectedMonth, i + 1)} sun={(day + i + 1) % 7 === 1 || (day + i + 1) % 7 === 0}
@@ -94,6 +103,10 @@ const Calendar = () => {
                   {date === 1 ? selectedMonth + '월 ' : ''}{date}일
                 </Today>
               </Day>
+              {tagArr.length > 0 && <ColorTag>{tagArr.map(item => {
+                const type = TypeList.find(value => value.id === item.type)
+                return <Color key={item.id} color={type?.color} title={`${type?.color} 카테고리`} />
+              })}</ColorTag>}
             </CalDay>
           );
         }
@@ -143,7 +156,7 @@ const Calendar = () => {
     }
 
     return dayArr;
-  }, [selectedYear, selectedMonth, dateTotalCount, props]);
+  }, [selectedYear, selectedMonth, dateTotalCount, props, isTodo]);
 
   return (
     <Container>
@@ -225,4 +238,13 @@ const Today = styled.div<{ today?: boolean, sun?: boolean, type?: number, select
 const Title = styled.div`
   font-size: 46px;
   font-weight: bold;
+`
+
+const ColorTag = styled.div`
+  width: 100%;
+  display: flex;
+  row-gap: 6px;
+  column-gap: 6px;
+  flex-wrap: wrap;
+  overflow: hidden;
 `
