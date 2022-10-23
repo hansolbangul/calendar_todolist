@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
+import { isTodoAtom } from '../atoms';
 import { TypeList } from '../DB/TypeDb';
 import eventBus from '../eventBus/bus';
-import { IDate } from '../ts/interface';
+import { IDate, ITodo } from '../ts/interface';
 import { Flex } from '../ts/styled';
 
 const Header = styled.div`
@@ -23,29 +25,51 @@ export const AddModal = () => {
     day: new Date().getDay(), //오늘 요일
   };
   const [typeList, setTypeList] = useState(TypeList)
+  const [isTodo, setIsTodo] = useRecoilState<ITodo[]>(isTodoAtom)
   const [type, setType] = useState<number>(0)
   const [start, setStart] = useState<string>(`${today.year}-${today.month}-${today.date}`)
-  const [end, setEnd] = useState<string>(`${today.year}-${today.month}-${today.date}`)
+  const [time, setTime] = useState<string>(`${today.year}-${today.month}-${today.date}`)
   const [title, setTitle] = useState<string>('')
-  const [content, setContent] = useState<string>()
+  const [content, setContent] = useState<string>('')
 
   const [show, setShow] = useState(false)
 
-  const changeType = (e: any) => {
-    setType(Number(e.target.value));
-  };
+  useEffect(() => {
+    eventBus.on('modal', setting)
+
+    return () => {
+      eventBus.remove('modal')
+    }
+  })
+
+
+  const addTodo = () => {
+    let id = 0 as number | undefined
+    if (isTodo.length > 0) {
+      id = isTodo.at(-1)?.id
+    }
+    setIsTodo(item => [...item, {
+      id: id ? id + 1 : 0,
+      startDate: start,
+      dateTime: time,
+      title: title,
+      content: content,
+      type: type
+    }])
+    handleClose()
+  }
+  console.log('type', type)
 
   const typeSelect = useCallback(() => {
     return (<Flex>
       {typeList.map(item => <Label
+        htmlFor={'chk' + item.id}
         color={item.color} key={item.id} >
-        <Input type={'radio'} checked={type === item.id} value={item.id} onChange={(e) => changeType(e)} />{item.title}
+        <Input id={'chk' + item.id} type={'radio'} checked={type === item.id} value={item.id} onChange={() => setType(item.id)} />{item.title}
       </Label>)}
     </Flex>
     )
   }, [type, typeList])
-
-  const addTodo = () => { }
 
   const dataForm = useCallback(() => {
     return (
@@ -56,7 +80,7 @@ export const AddModal = () => {
         </CenterFlex>
         <CenterFlex>
           <Text>종료 날짜</Text>
-          <TextInput type={'date'} value={end} onChange={(e) => setEnd(e.target.value)} />
+          <TextInput type={'time'} value={time} onChange={(e) => setTime(e.target.value)} />
         </CenterFlex>
         <CenterFlex>
           <Text>제목</Text>
@@ -71,33 +95,29 @@ export const AddModal = () => {
         </CenterFlex>
       </Flex>
     )
-  }, [start, end, title, Textarea])
-
-  useEffect(() => {
-    eventBus.on('modal', setting)
-
-    return () => {
-      eventBus.remove('modal')
-    }
-  })
+  }, [start, time, title, content, type])
 
   const setting = (value: IModal) => {
     const { detail: { today, visible } } = value
 
     setStart(`${today.year}-${today.month < 10 ? '0' + today.month : today.month}-${today.date < 10 ? '0' + today.date : today.date}`)
-    setEnd(`${today.year}-${today.month < 10 ? '0' + today.month : today.month}-${today.date < 10 ? '0' + today.date : today.date}`)
+    setTime(today.time)
     setShow(visible)
 
   }
 
   const handleClose = () => {
     setShow(false)
+    setType(0)
+    setTitle('')
+    setContent('')
   };
+
 
 
   return (
     <ModalForm onClick={handleClose} bottom={show}>
-      <Modal bottom={show}>
+      <Modal onClick={e => e.stopPropagation()} bottom={show}>
         {typeSelect()}
         {dataForm()}
       </Modal>
