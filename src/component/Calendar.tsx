@@ -15,7 +15,7 @@ const Calendar = () => {
     date: new Date().getDate(), //오늘 날짜
     day: new Date().getDay(), //오늘 요일
   };
-  const week = ["일", "월", "화", "수", "목", "금", "토"]; //일주일
+  const week = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]; //일주일
   const [selectedYear, setSelectedYear] = useState(today.year); //현재 선택된 연도
   const [selectedMonth, setSelectedMonth] = useState(today.month); //현재 선택된 달
   const dateTotalCount = new Date(selectedYear, selectedMonth, 0).getDate(); //선택된 연도, 달의 마지막 날짜
@@ -23,7 +23,7 @@ const Calendar = () => {
     year: today.year,
     month: today.month,
     date: today.date,
-    time: '10:00'
+    dateTime: '10:00'
   })
 
   const prevMonth = useCallback(() => {
@@ -51,7 +51,7 @@ const Calendar = () => {
       year: selectedYear,
       month: month,
       date: date,
-      time: '10:00'
+      dateTime: '10:00'
     })
   }
 
@@ -81,14 +81,11 @@ const Calendar = () => {
     let prev = 0
     let month = 0
     let date = 0
-    console.log(week)
     const day = new Date(selectedYear, selectedMonth - 1, 1).getDay();
     for (const nowDay of week) {
-      console.log(day, week[day], nowDay)
       if (week[day] === nowDay) {
         for (let i = 0; i < dateTotalCount; i++) {
           date = i + 1
-
           const tagArr = isTodo.filter(item => new Date(item.startDate).getTime() === new Date(`${selectedYear}-${selectedMonth}-${date}`).getTime())
           dayArr.push(
             <CalDay
@@ -98,8 +95,7 @@ const Calendar = () => {
               <Day>
                 <Today
                   sun={(day + i + 1) % 7 === 1 || (day + i + 1) % 7 === 0}
-                  select={selectedMonth === props.month && props.date === i + 1}
-                  today={selectedMonth === today.month && today.date === i + 1}>
+                  select={selectedMonth === props.month && props.date === i + 1}>
                   {date === 1 ? selectedMonth + '월 ' : ''}{date}일
                 </Today>
               </Day>
@@ -114,7 +110,6 @@ const Calendar = () => {
         // 다음 달 미리 몇개 넣기
         for (let i = 0; (1 + dayArr.length) % 7 !== 1; i++) {
           date = i + 1
-          console.log(month)
           month = selectedMonth === 12 ? 1 : selectedMonth + 1
           dayArr.push(
             <CalDay
@@ -136,7 +131,6 @@ const Calendar = () => {
           } else {
             prev = new Date(selectedYear, selectedMonth - 1, 0).getDate();
           }
-          console.log(week.indexOf(week[day]))
           for (let i = 0; i < week.indexOf(week[day]); i++) {
             date = prev - week.indexOf(week[day]) + i + 1
             dayArr.push(
@@ -159,35 +153,31 @@ const Calendar = () => {
   }, [selectedYear, selectedMonth, dateTotalCount, props, isTodo]);
 
   return (
-    <Container>
-      <TitleForm>
-        <Title>{selectedYear}년 {selectedMonth}월</Title>
-        <div className="pagination">
-          <button onClick={prevMonth}>◀︎</button>
-          <button onClick={nextMonth}>▶︎</button>
-        </div>
-      </TitleForm>
-      <Flex>
-        <CalLine>
-          <CalRows bottom='2px'>
-            {returnWeek()}
-          </CalRows>
-          <CalRows>
-            {returnDay()}
-          </CalRows>
-        </CalLine>
-        <TodoList item={props} />
-      </Flex>
-    </Container>
+    <Contain>
+      <CalLine>
+        <CalRows bottom='2px'>
+          {returnWeek()}
+        </CalRows>
+        <CalRows>
+          {returnDay()}
+        </CalRows>
+      </CalLine>
+      <TodoList prevMonth={prevMonth} nextMonth={nextMonth} item={props} now={{ year: selectedYear, month: selectedMonth }} />
+    </Contain>
   );
 };
 
 export default Calendar;
 
+const Contain = styled(Flex)`
+  margin-top: 80px;
+  display: flex;
+`;
+
 const CalLine = styled.div`
-  padding: 6px;
+  padding: 80px 6px 6px 6px;
   width: 800px;
-  background-color: #404040;
+  background-color: ${props => props.theme.calColor}; 
   display: flex;
   flex-direction: column;
 `
@@ -205,7 +195,6 @@ const CalDay = styled.div<{ week?: boolean, sun?: boolean }>`
   width: calc((100% - 12px) / 7);
   padding: 5px;
   border-radius: 4px;
-  background-color: ${props => props.sun ? '#1d1f2197' : '#1D1F21'};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -213,7 +202,7 @@ const CalDay = styled.div<{ week?: boolean, sun?: boolean }>`
   height: ${props => props.week ? '30px' : '100px'};
   
   &:hover{
-    background-color: ${props => props.sun ? '#1d1f2135' : '#1d1f2199'};
+    opacity: 0.3;
     cursor: pointer;
   }
 `
@@ -221,28 +210,24 @@ const CalDay = styled.div<{ week?: boolean, sun?: boolean }>`
 const Day = styled.div`
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 `
 
-const Today = styled.div<{ today?: boolean, sun?: boolean, type?: number, select?: boolean }>`
+const Today = styled.div<{ select?: boolean, sun?: boolean, type?: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px;
   border-radius: 30px;
-  background-color: ${props => props.today ? '#f59649' : props.select ? '#5cefec' : 'none'};
+  background-color: ${props => props.select ? '#f59649' : 'none'};
 
-  color: ${props => props.type === 1 ? '#ffffff6c' : props.sun ? '#ffffff6c' : '#fff'};
-`
-
-const Title = styled.div`
-  font-size: 46px;
-  font-weight: bold;
+  color: ${props => props.type === 1 ? '#ffffff6c' : props.theme.textColor};
 `
 
 const ColorTag = styled.div`
   width: 100%;
   display: flex;
+  justify-content: center;
   row-gap: 6px;
   column-gap: 6px;
   flex-wrap: wrap;
