@@ -7,15 +7,7 @@ import eventBus from '../eventBus/bus';
 import { IDate, ITodo } from '../ts/interface';
 import { Flex } from '../ts/styled';
 
-const Header = styled.div`
-font-size: 1.5em;
-`
-
-const Body = styled.div`
-  min-height: 160px;
-  padding: 30px 0;
-`
-interface IModal { detail: { visible: boolean, today: IDate } }
+interface IModal { detail: { visible: boolean, today: IDate, edit: boolean } }
 
 export const AddModal = () => {
   const today = {
@@ -30,7 +22,9 @@ export const AddModal = () => {
   const [start, setStart] = useState<string>(`${today.year}-${today.month}-${today.date}`)
   const [time, setTime] = useState<string>(`${today.year}-${today.month}-${today.date}`)
   const [title, setTitle] = useState<string>('')
-  const [content, setContent] = useState<string>('')
+  const [id, setId] = useState<number>(0)
+
+  const [isEdit, setIsEdit] = useState<boolean>(false)
 
   const [show, setShow] = useState(false)
 
@@ -53,12 +47,10 @@ export const AddModal = () => {
       startDate: start,
       dateTime: time,
       title: title,
-      content: content,
       type: type
     }])
     handleClose()
   }
-  console.log('type', type)
 
   const typeSelect = useCallback(() => {
     return (<Flex>
@@ -74,45 +66,51 @@ export const AddModal = () => {
   const dataForm = useCallback(() => {
     return (
       <Flex style={{ flexDirection: 'column' }}>
-        <CenterFlex>
-          <Text>시작 날짜</Text>
-          <TextInput type={'date'} value={start} onChange={(e) => setStart(e.target.value)} />
-        </CenterFlex>
-        <CenterFlex>
-          <Text>종료 날짜</Text>
-          <TextInput type={'time'} value={time} onChange={(e) => setTime(e.target.value)} />
-        </CenterFlex>
-        <CenterFlex>
-          <Text>제목</Text>
-          <TextInput placeholder="이름없는 제목" value={title} onChange={(e) => setTitle(e.target.value)} />
-        </CenterFlex>
-        <CenterFlex>
-          <Text>내용</Text>
-          <Textarea value={content} onChange={(e) => setContent(e.target.value)} />
-        </CenterFlex>
-        <CenterFlex>
-          <Btn onClick={addTodo}>저장</Btn>
-        </CenterFlex>
+        <Text>DATE</Text>
+        <TextInput type={'date'} value={start} onChange={(e) => setStart(e.target.value)} />
+        <Text>TIME</Text>
+        <TextInput type={'time'} value={time} onChange={(e) => setTime(e.target.value)} />
+        <Text>TITLE</Text>
+        <TextInput placeholder="이름없는 제목" value={title} onChange={(e) => setTitle(e.target.value)} />
       </Flex>
     )
-  }, [start, time, title, content, type])
+  }, [start, time, title, type])
 
   const setting = (value: IModal) => {
-    const { detail: { today, visible } } = value
+    const { detail: { today, visible, edit } } = value
 
     setStart(`${today.year}-${today.month < 10 ? '0' + today.month : today.month}-${today.date < 10 ? '0' + today.date : today.date}`)
-    setTime(today.time)
-    setShow(visible)
+    setTime(today.dateTime)
 
+    if (edit && today.title && today.type) {
+      setTitle(today.title)
+      setIsEdit(edit)
+      setType(today.type)
+      setId(today.id)
+    }
+
+    setShow(visible)
+  }
+
+  const editTodo = () => {
+    setIsTodo(item => item.map(_item => _item.id === id ? {
+      id: id,
+      startDate: start,
+      dateTime: time,
+      title: title,
+      type: type
+    } : { ..._item }))
+    handleClose()
   }
 
   const handleClose = () => {
     setShow(false)
     setType(0)
     setTitle('')
-    setContent('')
+    setIsEdit(false)
+    setType(0)
+    setId(0)
   };
-
 
 
   return (
@@ -120,14 +118,15 @@ export const AddModal = () => {
       <Modal onClick={e => e.stopPropagation()} bottom={show}>
         {typeSelect()}
         {dataForm()}
+        {isEdit ? <Btn onClick={editTodo} >
+          <Text>수정</Text>
+        </Btn> : <Btn onClick={addTodo} >
+          <Text>생성</Text>
+        </Btn>}
       </Modal>
     </ModalForm>
   );
 }
-
-const Span = styled.span`
-  margin-left: 20px;
-`
 
 const ModalForm = styled.div<{ bottom: boolean }>`
   position: absolute;
@@ -145,33 +144,25 @@ const ModalForm = styled.div<{ bottom: boolean }>`
 
 const Modal = styled.div<{ bottom?: boolean }>`
   width: 370px;
-  background-color: #fff;
+  background-color: ${props => props.theme.backColor};
   border-radius: 10px;
   padding: 30px;
-  color: black;
+  color: ${props => props.theme.textColor};
   z-index: 999999;
 
   transition: all ease-out 0.3s;
 `
 
 const Input = styled.input`
-  padding: 4px 6px;
   font-size: 14px;
   `
 
 const TextInput = styled(Input)`
-  width: 180px;
-  margin-left: 10px;
-  `
+  margin: 10px 0;
+`
 
 const Text = styled.div`
   flex: 1 1 auto;
-  `
-
-const CenterFlex = styled(Flex)`
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
   `
 
 const Label = styled.label<{ color: string }>`
@@ -180,14 +171,9 @@ const Label = styled.label<{ color: string }>`
   border-radius: 30px;
   font-size: 14px;
   margin-right: 6px;
-  color: #fff;
-  margin-bottom: 10px;
-  `
-
-const Textarea = styled.textarea`
-  resize: none;
-  width: 180px;
-  height: 200px;
+  color: ${props => props.theme.textColor};
+  opacity: ${props => props.theme.colorOpacity};
+  margin-bottom: 20px;
   `
 
 const Btn = styled.button`
@@ -197,6 +183,8 @@ const Btn = styled.button`
   justify-content: center;
   padding: 10px;
   border-radius: 20px;
-  background-color: #f59649;
-  color: #fff;
+  background-color: ${props => props.theme.modalBtnColor};
+  color: ${props => props.theme.textColor};
+  cursor: pointer;
+  margin-top: 10px;
   `
