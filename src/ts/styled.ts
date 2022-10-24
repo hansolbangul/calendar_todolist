@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const Center = styled.div`
   width: 100vw;
-  height: 100vh;
   display: flex;
   justify-content: center;
 `
@@ -31,4 +30,11 @@ export const Color = styled.div<{ color?: string }>`
   width: 10px;
   height: 10px;
   background-color: ${props => props.color};
+  opacity: ${props => props.theme.colorOpacity};
+  border-radius: 50%;
+  color: #fff;
+`
+
+export const Button = styled.button`
+
 `
