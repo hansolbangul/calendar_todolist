@@ -68,7 +68,7 @@ table {
   box-sizing: border-box;
 }
 body {
-  background-color:${(props) => props.theme.bgColor};
+  background-color: #F8F9FA;
   color:${(props) => props.theme.textColor};
 }
 a {
