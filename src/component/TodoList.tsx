@@ -1,21 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import React, { useCallback } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { isTodoAtom } from "../atoms";
 import { TypeList } from "../DB/TypeDb";
 import eventBus from "../eventBus/bus";
-import { IDate, ITodo } from "../ts/interface";
+import { ITime, ITodo } from "../ts/interface";
 import { Flex } from "../ts/styled";
 import { Todo } from "./Todo";
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { BiPlusMedical } from "react-icons/bi";
 
-interface IProps { item: IDate }
+interface IItem extends ITime { dateTime: string }
 
-export const TodoList = ({ item }: IProps) => {
-  const [isTodo, setIsTodo] = useRecoilState<ITodo[]>(isTodoAtom)
-  const [typeList, setTypeList] = useState(TypeList)
+interface IProps { item: IItem, prevMonth: () => void, nextMonth: () => void, now: { year: number, month: number } }
+
+export const TodoList = ({ item, prevMonth, nextMonth, now }: IProps) => {
+  const isTodo = useRecoilValue<ITodo[]>(isTodoAtom)
+  const typeList = TypeList
 
   const modal = () => {
-    eventBus.emit('modal', { visible: true, today: item })
+    eventBus.emit('modal', { visible: true, today: item, edit: false })
   }
 
   const listTodo = useCallback(() => {
@@ -26,61 +30,94 @@ export const TodoList = ({ item }: IProps) => {
         return <Todo key={_item.id} color={type?.color} type={type?.title} item={_item} ></Todo>
       }))
 
-    return tagArr.length > 0 ? tagArr : <NoneData>일정이 없습니다.</NoneData>
+    return tagArr.length > 0 ? tagArr : <Todo none={true} ></Todo>
 
   }, [item, isTodo])
 
   return (
     <ListForm>
-      <Btn onClick={modal} >일정 추가 </Btn>
+      <TopForm>
+        <Prev onClick={prevMonth} />
+        <Title>{now.year}년 {now.month}월</Title>
+        <Next onClick={nextMonth} />
+      </TopForm>
       <ColumnFlex>
+        <Today>TODAY</Today>
         {listTodo()}
       </ColumnFlex>
+      <Btn onClick={modal} ><BiPlusMedical /></Btn>
     </ListForm>
   )
 }
 
-const NoneData = styled.div`
-  padding: 20px;
-  text-align: center;
-  border: 1px black dashed;
-  border-radius: 10px;
+const Prev = styled(BsChevronLeft)`
+  cursor: pointer;
+
+  &:hover{
+    color: red;
+  }
+`
+
+const Next = styled(BsChevronRight)`
+  cursor: pointer;
+
+  &:hover{
+    color: red;
+  }
+`
+
+const Title = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 10px;
+`
+
+const TopForm = styled(Flex)`
+  align-items: center;
+  height: 80px;
+  justify-content: center;
+`
+
+const Today = styled.h2`
+  font-size: 16px;
+  margin-bottom: 24px;
+
 `
 
 const ListForm = styled.div`
   width: 300px;
-  padding: 0 20px;
+  background-color: ${props => props.theme.backColor}; 
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 99;
+  color: ${props => props.theme.textColor};
   `
 
 const ColumnFlex = styled(Flex)`
   margin-top: 10px;
   flex-direction: column;
+  padding: 40px;
   flex: 1 1 auto;
+  height: 400px;
   border-radius: 6px;
-  max-height: 500px;
-  
   overflow: scroll;
 `
 
-
-const Input = styled.input`
-  padding: 4px 6px;
-  font-size: 14px;
-  `
-
 const Btn = styled.button`
   width: 100%;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px;
-  border-radius: 20px;
-  background-color: #f59649;
-  color: #fff;
+  background-color: ${props => props.theme.btnColor}; 
+  color: ${props => props.theme.textColor};
+  opacity: 0.5;
 
   cursor: pointer;
+
+  &:hover {
+    color: red;
+  }
   `
