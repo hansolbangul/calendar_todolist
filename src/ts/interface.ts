@@ -5,12 +5,13 @@ export interface IType {
 }
 
 export interface ITodo {
-  id?: number | undefined;
+  id: number;
   startDate: string;
   dateTime: string;
   title: string;
-  content: string;
   type: number;
 }
 
-export interface IDate { year: number; month: number; date: number, time: string; }
+export interface ITime { year: number; month: number; date: number; }
+
+export type IDate = ITime & ITodo
