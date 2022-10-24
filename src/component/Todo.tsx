@@ -1,48 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { ITodo, IType } from "../ts/interface";
+import { ITodo } from "../ts/interface";
 import { Color, Flex } from "../ts/styled";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import { BsChevronDoubleDown, BsChevronDoubleUp } from "react-icons/bs";
+import { isTodoAtom } from "../atoms";
+import { useRecoilState } from "recoil";
+import eventBus from "../eventBus/bus";
 
-interface IProps { item: ITodo, color: string | undefined, type: string | undefined }
+interface IProps { item?: ITodo, color?: string | undefined, type?: string | undefined, none?: boolean }
 
-export const Todo = ({ item, color, type }: IProps) => {
-  const [show, setShow] = useState(false)
-  const [opacity, setOpacity] = useState(false)
+export const Todo = ({ item, color, type, none }: IProps) => {
+  const [isTodo, setIsTodo] = useRecoilState<ITodo[]>(isTodoAtom)
 
-  useEffect(() => {
-    if (show) {
-      setTimeout(() => { setOpacity(true) }, 400)
-    } else {
-      setOpacity(false)
+  if (none) return <Form><Title>일정이 없습니다.</Title></Form>
+
+  const editTodo = () => {
+    if (item) {
+      const timeArr = item?.startDate.split('-').map(Number)
+      eventBus.emit('modal', { visible: true, today: { year: timeArr[0], month: timeArr[1], date: timeArr[2], ...item }, edit: true })
     }
-  }, [show])
+  }
+
+  const delTodo = () => {
+    setIsTodo(isTodo.filter(_value => _value.id !== item?.id))
+  }
 
   return (
-    <Column>
-      <Contain>
-        <Form>
-          <Section style={{ justifyContent: 'space-between' }}>
-            <Title>{item.title}</Title>
-            <Flex>
-              <Edit />
-              <Del />
-            </Flex>
-          </Section>
-          <Section style={{ justifyContent: 'space-between', padding: '0 4px' }}>
-            <Date>{item.startDate} | {item.dateTime}</Date>
-            <Color color={color} title={`${type} 카테고리`} />
-          </Section>
-
-        </Form>
-        <Flex style={{ marginLeft: '6px' }}>{show ? <None onClick={() => setShow(false)}></None> : <More onClick={() => setShow(true)} />}</Flex>
-      </Contain>
-      {show && <ContentForm opacity={opacity ? 1 : 0} >
-        <br />
-        <Content>{item.content}</Content>
-      </ContentForm>}
-    </Column>
+    <Flip id={item?.id ? `?${item?.id}` : '0'}>
+      <Form className="card">
+        <Front>
+          <Color style={{ marginRight: '10px' }} color={color} title={`${type} 카테고리`} />
+          <Title>{item?.title}</Title>
+          <Date>{item?.dateTime}</Date>
+        </Front>
+        <Back>
+          <Title>{item?.title}</Title>
+          <Edit onClick={editTodo}></Edit>
+          <Del onClick={delTodo}></Del>
+        </Back>
+      </Form>
+    </Flip>
   )
 }
 
@@ -52,71 +49,58 @@ const Edit = styled(AiOutlineEdit)`
     color: red;
   }
   margin-right: 4px;
-
 `
 const Del = styled(AiOutlineDelete)`
   cursor: pointer;
   &:hover {
     color: red;
   }
-
 `
 
-const More = styled(BsChevronDoubleDown)`
-  cursor: pointer;
-  &:hover {
-    color: red;
+const Flip = styled(Flex)`
+  width: 100%;
+  height: 10px;
+  position: relative; 
+  margin-bottom: 20px;
+  &:hover .card{
+    transform: rotateY(180deg);
   }
 `
-const None = styled(BsChevronDoubleUp)`
-  cursor: pointer;
-  &:hover {
-    color: red;
-  }
-  
-`
 
-const ContentForm = styled(Flex) <{ opacity: number }>`
-  flex-direction: column;
-  opacity: ${props => props.opacity ? 1 : 0};
-  visibility: ${props => props.opacity ? "visible" : "hidden"};
-  transition: 0.4s all ease-in;
-`
-
-const Column = styled(Flex)`
-  flex-direction: column;
-  padding: 10px;
-  box-shadow: 1px 1px 1px 1px #a5a5a5;
-  border-radius: 10px;
-  margin-bottom: 10px;
-`
-
-const Contain = styled(Flex)`
+const Card = styled(Flex)`
+  width: 100%;
   align-items: center;
-  justify-content: center;
+  height: 100%;
+
+  position: absolute;
+  backface-visibility: hidden;
+  display: flex;
+`
+
+const Front = styled(Card)`
+`
+
+const Back = styled(Card)`
+  transform: rotateY(180deg);
 `
 
 const Form = styled(Flex)`
-  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: .4s;
+  transform-style: preserve-3d;
 
-  cursor: pointer;
-  flex: 1 1 auto;
-  padding-right: 6px;
-  border-right: 1px dashed black;
-`
-
-const Section = styled(Flex)`
-  margin-bottom: 6px;
 `
 
 const Title = styled.h2`
-  font-size: 20px;
+  font-size: 14px;
+  flex: 1 1 auto;
+  white-space : nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const Date = styled.div`
   font-size: 12px;
-`
-
-const Content = styled.div`
-  font-size: 12px
 `
