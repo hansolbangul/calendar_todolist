@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { isTodoAtom } from "../atoms";
 import { TypeList } from "../DB/TypeDb";
 import { ITodo } from "../ts/interface";
-import { Color, Container, Flex, TitleForm } from "../ts/styled";
+import { Color, Flex } from "../ts/styled";
 import { TodoList } from "./TodoList";
 
 const Calendar = () => {
@@ -56,7 +56,7 @@ const Calendar = () => {
   }
 
   const returnWeek = useCallback(() => {
-    //요일 반환 함수
+    //요일을 반환하는 함수
     let weekArr: object[] = [];
     week.forEach((v, index) => {
       weekArr.push(
