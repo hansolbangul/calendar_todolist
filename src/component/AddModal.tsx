@@ -166,13 +166,12 @@ const Text = styled.div`
   `
 
 const Label = styled.label<{ color: string }>`
-  background-color: ${props => props.color};
   padding: 4px 10px 4px 0;
   border-radius: 30px;
   font-size: 14px;
   margin-right: 6px;
   color: ${props => props.theme.textColor};
-  opacity: ${props => props.theme.colorOpacity};
+  background-color: ${props => props.theme.colorOpacity === 1 ? '#' + props.color : `rgba(${parseInt(props.color.substring(0, 2), 16)}, ${parseInt(props.color.substring(2, 4), 16)}, ${parseInt(props.color.substring(4, 6), 16)}, ${props.theme.colorOpacity} )`}; // 배경만 투명
   margin-bottom: 20px;
   `
 
