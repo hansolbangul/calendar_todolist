@@ -14,7 +14,7 @@ export const lightTheme: DefaultTheme = {
   bgColor: '#F8F9FA',
   textColor: 'black',
   calColor: '#fff',
-  btnColor: '#D8D9CF',
+  btnColor: '#FBF7DD',
   backColor: '#FAF7F0',
   modalBtnColor: '#EDDBC0',
   colorOpacity: 0.6,
