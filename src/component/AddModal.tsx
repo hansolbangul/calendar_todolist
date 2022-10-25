@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { isTodoAtom } from '../atoms';
 import { TypeList } from '../DB/TypeDb';
@@ -53,7 +53,7 @@ export const AddModal = () => {
   }
 
   const typeSelect = useCallback(() => {
-    return (<Flex>
+    return (<Flex style={{ flexWrap: 'wrap' }}>
       {typeList.map(item => <Label
         htmlFor={'chk' + item.id}
         color={item.color} key={item.id} >
@@ -82,7 +82,7 @@ export const AddModal = () => {
     setStart(`${today.year}-${today.month < 10 ? '0' + today.month : today.month}-${today.date < 10 ? '0' + today.date : today.date}`)
     setTime(today.dateTime)
 
-    if (edit && today.title && today.type) {
+    if (edit && today.title && today.type !== undefined) {
       setTitle(today.title)
       setIsEdit(edit)
       setType(today.type)
