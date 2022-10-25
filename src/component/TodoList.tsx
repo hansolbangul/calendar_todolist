@@ -27,7 +27,7 @@ export const TodoList = ({ item, prevMonth, nextMonth, now }: IProps) => {
       .sort((a, b) => new Date(`${a.startDate} ${a.dateTime}`).getTime() - new Date(`${b.startDate} ${b.dateTime}`).getTime())
       .map(_item => {
         const type = typeList.find(value => value.id === _item.type)
-        return <Todo key={_item.id} color={type?.color} type={type?.title} item={_item} ></Todo>
+        return <Todo key={_item.id} color={'#' + type?.color} type={type?.title} item={_item} ></Todo>
       }))
 
     return tagArr.length > 0 ? tagArr : <Todo none={true} ></Todo>

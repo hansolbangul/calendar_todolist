@@ -101,7 +101,7 @@ const Calendar = () => {
               </Day>
               {tagArr.length > 0 && <ColorTag>{tagArr.map(item => {
                 const type = TypeList.find(value => value.id === item.type)
-                return <Color key={item.id} color={type?.color} title={`${type?.color} 카테고리`} />
+                return <Color key={item.id} color={'#' + type?.color} title={`${type?.color} 카테고리`} />
               })}</ColorTag>}
             </CalDay>
           );
