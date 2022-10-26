@@ -17,6 +17,7 @@ const Footer = styled.div`
   color: ${(props) => props.theme.textColor};
   box-shadow: 1px 1px 1px 1px gray;
   background-color: ${(props) => props.theme.bgColor};
+  z-index: 99999;
   cursor: pointer;
 `;
 
