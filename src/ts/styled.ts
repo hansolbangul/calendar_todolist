@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
+export const intFrameWidth = window.innerWidth
 
 export const Center = styled.div`
   width: 100vw;
