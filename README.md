@@ -62,20 +62,27 @@ npm run start => react 프로젝트를 오픈합니다. [http://localhost:3000](
 
 ### 간단한 이미지 [웹]
 
-##### 전체화면 라이트 / 다크모드
-<center><img width="1840" alt="전체화면" src="https://user-images.githubusercontent.com/71314689/198047440-6cb62ad4-ca9a-4586-8807-d03a293c96e4.png"></center>
-<center><img width="1840" alt="전체화면 (다크)" src="https://user-images.githubusercontent.com/71314689/198047520-76159532-2933-4506-a358-1151e4d122e8.png"></center>
+#### 전체화면 라이트 / 다크모드
+<p align="center">
+<img width="1840" alt="전체화면" src="https://user-images.githubusercontent.com/71314689/198047440-6cb62ad4-ca9a-4586-8807-d03a293c96e4.png">
+<img width="1840" alt="전체화면 (다크)" src="https://user-images.githubusercontent.com/71314689/198047520-76159532-2933-4506-a358-1151e4d122e8.png">
+</p>
+  
+#### 생성화면 라이트 / 다크
+<p align="center">
+<img width="599" alt="마우스 호버" src="https://user-images.githubusercontent.com/71314689/198047477-1caad2cc-0b29-427a-a6d7-4c6d34858012.png">
+<img width="584" alt="마우스 호버 (다크)" src="https://user-images.githubusercontent.com/71314689/198047538-98b027ed-0859-41b4-b11a-9f2632e1f553.png">
+</p>
 
-##### 마우스 호버 라이트 / 다크
-<center><img width="599" alt="마우스 호버" src="https://user-images.githubusercontent.com/71314689/198047477-1caad2cc-0b29-427a-a6d7-4c6d34858012.png"></center>
-<center><img width="584" alt="마우스 호버 (다크)" src="https://user-images.githubusercontent.com/71314689/198047538-98b027ed-0859-41b4-b11a-9f2632e1f553.png"></center>
+#### 생성화면 라이트 / 다크
+<p align="center">
+<img width="1840" alt="생성화면" src="https://user-images.githubusercontent.com/71314689/198047490-bf5959b7-06a2-4af6-99df-109a07bb325e.png">
+<img width="1840" alt="생성화면 (다크)" src="https://user-images.githubusercontent.com/71314689/198047556-f525f5e7-f6e4-4536-9940-66f8432d7ab3.png">
+</p>
 
-##### 생성화면 라이트 / 다크
-<center><img width="1840" alt="생성화면" src="https://user-images.githubusercontent.com/71314689/198047490-bf5959b7-06a2-4af6-99df-109a07bb325e.png"></center>
-<center><img width="1840" alt="생성화면 (다크)" src="https://user-images.githubusercontent.com/71314689/198047556-f525f5e7-f6e4-4536-9940-66f8432d7ab3.png"></center>
-
-##### 수정화면 라이트 / 다크
-<center><img width="1840" alt="수정화면" src="https://user-images.githubusercontent.com/71314689/198047503-2dac8031-1773-4ab6-b704-ff3231de90a0.png"></center>
-<center><img width="1840" alt="수정화면 (다크)" src="https://user-images.githubusercontent.com/71314689/198047573-9fd7de79-6532-4de9-be2e-f8c1c9812f94.png"></center>
-
+#### 수정화면 라이트 / 다크
+<p align="center">
+<img width="1840" alt="수정화면" src="https://user-images.githubusercontent.com/71314689/198047503-2dac8031-1773-4ab6-b704-ff3231de90a0.png">
+<img width="1840" alt="수정화면 (다크)" src="https://user-images.githubusercontent.com/71314689/198047573-9fd7de79-6532-4de9-be2e-f8c1c9812f94.png">
+</p>
 
