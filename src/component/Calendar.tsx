@@ -155,6 +155,7 @@ const Calendar = () => {
   return (
     <Contain>
       <CalLine>
+        <MainTitle>TODO LIST</MainTitle>
         <CalRows bottom='2px'>
           {returnWeek()}
         </CalRows>
@@ -169,17 +170,42 @@ const Calendar = () => {
 
 export default Calendar;
 
+const MainTitle = styled.div`
+  padding: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  
+
+  @media screen and (max-width: intFrameWidth) {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    /* font-size: 12px; */
+  }
+
+`
+
 const Contain = styled(Flex)`
-  margin-top: 80px;
   display: flex;
+  margin-top: 40px;
+
+  @media screen and (max-width: 500px) {
+    margin-top: 0;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
 `;
 
 const CalLine = styled.div`
-  padding: 80px 6px 6px 6px;
+  padding: 20px 6px 6px 6px;
   width: 800px;
   background-color: ${props => props.theme.calColor}; 
   display: flex;
   flex-direction: column;
+
+  @media screen and (max-width: 500px) {
+    padding: 20px;
+    width: 100%;
+  }
 `
 
 const CalRows = styled.div<{ bottom?: string }>`
@@ -219,9 +245,9 @@ const Today = styled.div<{ select?: boolean, sun?: boolean, type?: number }>`
   align-items: center;
   padding: 5px;
   border-radius: 30px;
-  background-color: ${props => props.select ? '#f59649' : 'none'};
+  background-color: ${props => props.select ? '#f59649': 'none'}; 
 
-  color: ${props => props.type === 1 ? '#ffffff6c' : props.theme.textColor};
+  color: ${props => props.type === 1 ? props.theme.prevNextColor : props.theme.textColor};
 `
 
 const ColorTag = styled.div`
