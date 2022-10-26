@@ -112,7 +112,6 @@ export const AddModal = () => {
     setId(0)
   };
 
-
   return (
     <ModalForm onClick={handleClose} bottom={show}>
       <Modal onClick={e => e.stopPropagation()} bottom={show}>
@@ -129,7 +128,7 @@ export const AddModal = () => {
 }
 
 const ModalForm = styled.div<{ bottom: boolean }>`
-  position: absolute;
+  position: fixed;
   display: flex;
   width: 100%;
   height: 100vh;
@@ -140,9 +139,11 @@ const ModalForm = styled.div<{ bottom: boolean }>`
   overflow: hidden;
   transition: all ease-out 0.6s;
   z-index: 101;
+  
 `
 
 const Modal = styled.div<{ bottom?: boolean }>`
+  position: absolute;
   width: 370px;
   background-color: ${props => props.theme.backColor};
   border-radius: 10px;
@@ -158,6 +159,7 @@ const Input = styled.input`
   `
 
 const TextInput = styled(Input)`
+  flex: 1 1 auto;
   margin: 10px 0;
 `
 
