@@ -5,7 +5,7 @@ import { isTodoAtom } from '../atoms';
 import { TypeList } from '../DB/TypeDb';
 import eventBus from '../eventBus/bus';
 import { IDate, ITodo } from '../ts/interface';
-import { Flex } from '../ts/styled';
+import { Flex, intFrameWidth } from '../ts/styled';
 
 interface IModal { detail: { visible: boolean, today: IDate, edit: boolean } }
 
@@ -63,18 +63,35 @@ export const AddModal = () => {
     )
   }, [type, typeList])
 
-  const dataForm = useCallback(() => {
+  const dateForm = useCallback(() => {
     return (
-      <Flex style={{ flexDirection: 'column' }}>
+      <>
         <Text>DATE</Text>
         <TextInput type={'date'} value={start} onChange={(e) => setStart(e.target.value)} />
+      </>
+    )
+
+  }, [start])
+
+  const timeForm = useCallback(() => {
+    return (
+      <>
         <Text>TIME</Text>
         <TextInput type={'time'} value={time} onChange={(e) => setTime(e.target.value)} />
+      </>
+    )
+
+  }, [time])
+
+  const titleForm = useCallback(() => {
+    return (
+      <>
         <Text>TITLE</Text>
         <TextInput placeholder="이름없는 제목" value={title} onChange={(e) => setTitle(e.target.value)} />
-      </Flex>
+      </>
     )
-  }, [start, time, title, type])
+
+  }, [title])
 
   const setting = (value: IModal) => {
     const { detail: { today, visible, edit } } = value
@@ -116,12 +133,19 @@ export const AddModal = () => {
     <ModalForm onClick={handleClose} bottom={show}>
       <Modal onClick={e => e.stopPropagation()} bottom={show}>
         {typeSelect()}
-        {dataForm()}
+        <Flex style={{ flexDirection: 'column' }}>
+          {dateForm()}
+          {timeForm()}
+          {titleForm()}
+        </Flex>
         {isEdit ? <Btn onClick={editTodo} >
           <Text>수정</Text>
         </Btn> : <Btn onClick={addTodo} >
           <Text>생성</Text>
         </Btn>}
+        <CBtn onClick={handleClose} >
+          <Text>닫기</Text>
+        </CBtn>
       </Modal>
     </ModalForm>
   );
@@ -152,6 +176,15 @@ const Modal = styled.div<{ bottom?: boolean }>`
   z-index: 999999;
 
   transition: all ease-out 0.3s;
+
+
+  @media screen and (max-width: 500px) {
+    /* width: ${intFrameWidth - 50}px; */
+    width: calc(100% - 50px);
+    flex-wrap: wrap;
+    border: 1px solid ${props => props.theme.textColor};
+  }
+
 `
 
 const Input = styled.input`
@@ -189,3 +222,9 @@ const Btn = styled.button`
   cursor: pointer;
   margin-top: 10px;
   `
+
+const CBtn = styled(Btn)`
+  background-color: ${props => props.theme.calColor};
+  color: ${props => props.theme.textColor};
+
+`

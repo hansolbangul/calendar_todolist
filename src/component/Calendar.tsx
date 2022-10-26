@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { isTodoAtom } from "../atoms";
 import { TypeList } from "../DB/TypeDb";
 import { ITodo } from "../ts/interface";
-import { Color, Flex } from "../ts/styled";
+import { Color, Flex, intFrameWidth } from "../ts/styled";
 import { TodoList } from "./TodoList";
 
 const Calendar = () => {
@@ -27,7 +27,7 @@ const Calendar = () => {
   })
 
   const prevMonth = useCallback(() => {
-    //이전 달 보기 보튼
+    //이전 달 보기
     if (selectedMonth === 1) {
       setSelectedMonth(12);
       setSelectedYear(selectedYear - 1);
@@ -37,7 +37,7 @@ const Calendar = () => {
   }, [selectedMonth]);
 
   const nextMonth = useCallback(() => {
-    //다음 달 보기 버튼
+    //다음 달 보기
     if (selectedMonth === 12) {
       setSelectedMonth(1);
       setSelectedYear(selectedYear + 1);
@@ -78,14 +78,11 @@ const Calendar = () => {
   const returnDay = useCallback(() => {
     //선택된 달의 날짜들 반환 함수
     let dayArr = [];
-    let prev = 0
-    let month = 0
-    let date = 0
     const day = new Date(selectedYear, selectedMonth - 1, 1).getDay();
     for (const nowDay of week) {
       if (week[day] === nowDay) {
         for (let i = 0; i < dateTotalCount; i++) {
-          date = i + 1
+          const date = i + 1
           const tagArr = isTodo.filter(item => new Date(item.startDate).getTime() === new Date(`${selectedYear}-${selectedMonth}-${date}`).getTime())
           dayArr.push(
             <CalDay
@@ -108,9 +105,9 @@ const Calendar = () => {
         }
 
         // 다음 달 미리 몇개 넣기
-        for (let i = 0; (1 + dayArr.length) % 7 !== 1; i++) {
-          date = i + 1
-          month = selectedMonth === 12 ? 1 : selectedMonth + 1
+        for (let i = 0; dayArr.length < 42; i++) {
+          const date = i + 1
+          const month = selectedMonth === 12 ? 1 : selectedMonth + 1
           dayArr.push(
             <CalDay
               key={i + 200}
@@ -126,13 +123,14 @@ const Calendar = () => {
         break
       } else {
         if (dayArr.length === 0) {
+          let prev = 0
           if (selectedMonth === 1) {
             prev = new Date(selectedYear - 1, 12, 0).getDate();
           } else {
             prev = new Date(selectedYear, selectedMonth - 1, 0).getDate();
           }
           for (let i = 0; i < week.indexOf(week[day]); i++) {
-            date = prev - week.indexOf(week[day]) + i + 1
+            const date = prev - week.indexOf(week[day]) + i + 1
             dayArr.push(
               <CalDay
                 key={i + 300}
@@ -174,19 +172,16 @@ const MainTitle = styled.div`
   padding: 20px;
   font-size: 20px;
   font-weight: bold;
-  
-
-  @media screen and (max-width: intFrameWidth) {
-    margin-top: 20px;
-    flex-wrap: wrap;
-    /* font-size: 12px; */
-  }
-
 `
 
 const Contain = styled(Flex)`
   display: flex;
   margin-top: 40px;
+
+  @media screen and (max-width: 650px) {
+    margin-top: 0;
+    font-size: 12px;
+  }
 
   @media screen and (max-width: 500px) {
     margin-top: 0;
@@ -201,6 +196,11 @@ const CalLine = styled.div`
   background-color: ${props => props.theme.calColor}; 
   display: flex;
   flex-direction: column;
+
+  @media screen and (max-width: 1400px) {
+    padding: 20px;
+    width: 100%;
+  }
 
   @media screen and (max-width: 500px) {
     padding: 20px;
@@ -245,7 +245,7 @@ const Today = styled.div<{ select?: boolean, sun?: boolean, type?: number }>`
   align-items: center;
   padding: 5px;
   border-radius: 30px;
-  background-color: ${props => props.select ? '#f59649': 'none'}; 
+  background-color: ${props => props.select ? '#f59649' : 'none'}; 
 
   color: ${props => props.type === 1 ? props.theme.prevNextColor : props.theme.textColor};
 `
