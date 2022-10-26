@@ -92,6 +92,10 @@ const ListForm = styled.div`
   position: relative;
   z-index: 99;
   color: ${props => props.theme.textColor};
+
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
   `
 
 const ColumnFlex = styled(Flex)`
