@@ -8,6 +8,7 @@ declare module 'styled-components' {
     btnColor: string;
     backColor: string;
     modalBtnColor: string;
-    colorOpacity: number
+    colorOpacity: number;
+    prevNextColor: string;
   }
 }

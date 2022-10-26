@@ -8,6 +8,7 @@ export const darkTheme: DefaultTheme = {
   backColor: '#35364e', // 할일 리스트 색상
   modalBtnColor: '#2f2f3f95', // 모달 버튼 색상
   colorOpacity: 1,
+  prevNextColor: '#ffffff6c'
 };
 
 export const lightTheme: DefaultTheme = {
@@ -18,4 +19,5 @@ export const lightTheme: DefaultTheme = {
   backColor: '#FAF7F0',
   modalBtnColor: '#EDDBC0',
   colorOpacity: 0.6,
+  prevNextColor: '#717171'
 };
