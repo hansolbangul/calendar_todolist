@@ -68,7 +68,7 @@ npm run start => react 프로젝트를 오픈합니다. [http://localhost:3000](
 <img width="1840" alt="전체화면 (다크)" src="https://user-images.githubusercontent.com/71314689/198047520-76159532-2933-4506-a358-1151e4d122e8.png">
 </p>
   
-#### 생성화면 라이트 / 다크
+#### 마우스 호버 라이트 / 다크
 <p align="center">
 <img width="599" alt="마우스 호버" src="https://user-images.githubusercontent.com/71314689/198047477-1caad2cc-0b29-427a-a6d7-4c6d34858012.png">
 <img width="584" alt="마우스 호버 (다크)" src="https://user-images.githubusercontent.com/71314689/198047538-98b027ed-0859-41b4-b11a-9f2632e1f553.png">
@@ -86,3 +86,20 @@ npm run start => react 프로젝트를 오픈합니다. [http://localhost:3000](
 <img width="1840" alt="수정화면 (다크)" src="https://user-images.githubusercontent.com/71314689/198047573-9fd7de79-6532-4de9-be2e-f8c1c9812f94.png">
 </p>
 
+### 간단한 이미지 [모바일]
+
+#### 화이트모드
+<p align="center">
+<img width="682" alt="모바일 메인" src="https://user-images.githubusercontent.com/71314689/198050739-87759fb4-5d2c-4039-b522-8fd222c8e6d9.png">
+<img width="682" alt="모바일 리스트" src="https://user-images.githubusercontent.com/71314689/198050744-de89cfc6-90a8-4b19-90e0-07c241adb359.png">
+<img width="682" alt="모바일 모달" src="https://user-images.githubusercontent.com/71314689/198050748-f240f2bd-30b7-4c55-b05f-718cecb865ae.png">
+</p>
+
+#### 다크모드
+<p align="center">
+<img width="682" alt="모바일 메인 (다크)" src="https://user-images.githubusercontent.com/71314689/198050751-1af1d98e-0cf3-4fd9-9163-dabdac042ce2.png">
+<img width="682" alt="모바일 리스트 (다크)" src="https://user-images.githubusercontent.com/71314689/198050754-b34df940-aaa2-487f-8007-50a5742be5dc.png">
+<img width="682" alt="모바일 모달 (다크)" src="https://user-images.githubusercontent.com/71314689/198050756-84d1359d-ce04-4f6a-b0fc-a92f8f7c14fd.png">
+</p>
+  
+  
