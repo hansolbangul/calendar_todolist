@@ -27,7 +27,6 @@ export const TodoList = ({ item, prevMonth, nextMonth, now }: IProps) => {
       const dateList = value.startDate.split('-').map(Number)
       return new Date(dateList[0], dateList[1] - 1, dateList[2]).getTime() === new Date(item.year, item.month - 1, item.date).getTime()
     })
-      // const tagArr = (isTodo.filter(value => new Date(value.startDate).getTime() === new Date(`${item.year}${item.month}-${item.date < 10 ? '0' + item.date : item.date}`).getTime())
       .sort((a, b) => new Date(`${a.startDate} ${a.dateTime}`).getTime() - new Date(`${b.startDate} ${b.dateTime}`).getTime())
       .map(_item => {
         const type = typeList.find(value => value.id === _item.type)

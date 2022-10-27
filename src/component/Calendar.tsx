@@ -87,7 +87,6 @@ const Calendar = () => {
             const dateList = value.startDate.split('-').map(Number)
             return new Date(dateList[0], dateList[1] - 1, dateList[2]).getTime() === new Date(selectedYear, selectedMonth - 1, date).getTime()
           }))
-          // const tagArr = isTodo.filter(item => new Date(item.startDate).getTime() === new Date(`${selectedYear}-${selectedMonth}-${date < 10 ? '0' + date : date}`).getTime())
           dayArr.push(
             <CalDay
               onClick={() => dayChange(selectedMonth, i + 1)} sun={(day + i + 1) % 7 === 1 || (day + i + 1) % 7 === 0}
